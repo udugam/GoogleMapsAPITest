@@ -1,16 +1,10 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Simple Map</title>
-    <meta name="viewport" content="initial-scale=1.0">
-    <meta charset="utf-8">
-    <style>
-      /* Always set the map height explicitly to define the size of the div
-       * element that contains the map. */
+    <style type="text/css">
       #map {
         height: 100%;
       }
-      /* Optional: Makes the sample page fill the window. */
       html, body {
         height: 100%;
         margin: 0;
@@ -20,19 +14,14 @@
   </head>
   <body>
     <div id="map"></div>
-    <script>
-      var map;
-      var marker;
-      var toronto = {lat: 43.6, lng: -79.38}
-      function initMap() {
-        map = new google.maps.Map(document.getElementById('map'), {
-          center: toronto,
-          zoom: 12
-        });
-        marker = new google.maps.Marker({position: toronto, map: map});
-      }
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBRkzZrUzKNQu0a00P61fXAT-Br3cBHVHQ&libraries=visualization&callback=initMap">
     </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBRkzZrUzKNQu0a00P61fXAT-Br3cBHVHQ&callback=initMap"
-    async defer></script>
+
+    /**
+     * The JavaScript code that creates the firebase map goes between the empty script tags below.
+     */
+    <script src="./firebasemap.js"></script>
+
   </body>
 </html>
