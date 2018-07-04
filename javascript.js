@@ -33,6 +33,13 @@ function initMap() {
         $("#lat").text("Latitude: "+lat);
         $("#long").text("Longitude: "+long);
 
+        //Add marker to map
+        var marker = new google.maps.Marker( {
+            position: {lat: lat, lng: long},
+            map: map,
+            title: "POI"
+        })
+
         //Store lat and long in database
         database.ref().push({
             latitude: lat,
@@ -40,6 +47,8 @@ function initMap() {
         })
     })
 }
+
+
 
 
 
