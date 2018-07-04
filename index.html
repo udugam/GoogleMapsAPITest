@@ -1,23 +1,24 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <style type="text/css">
+    <style>
+      /* Set the size of the div element that contains the map */
       #map {
-        height: 100%;
-      }
-      html, body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-      }
+        height: 400px;  /* The height is 400 pixels */
+        width: 100%;  /* The width is the width of the web page */
+       }
     </style>
   </head>
   <body>
+    <h2>Google Maps API Test</h2>
+    <!--The div element for the map -->
     <div id="map"></div>
+    <h3 id="lat"></h3>
+    <h3 id="long"></h3>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="./javascript.js"></script>
     <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBRkzZrUzKNQu0a00P61fXAT-Br3cBHVHQ&libraries=visualization&callback=initMap">
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBRkzZrUzKNQu0a00P61fXAT-Br3cBHVHQ&callback=initMap">
     </script>
-    <script src="./firebasemap.js"></script>
-
   </body>
 </html>
