@@ -13,7 +13,6 @@ firebase.initializeApp(config);
 // Assign the reference to the database to a variable named 'database'
 var database = firebase.database();
 
-
 // Initialize and add the map
 function initMap() {
     // The location of Toronto
@@ -46,6 +45,21 @@ function initMap() {
             longitude: long
         })
     })
+
+    //Setup listener for everytime a child is added to the root for the database
+    database.ref().on("child_added", function(snapshot) {
+        var lat = snapshot.val().latitude
+        var long = snapshot.val().longitude
+
+        var marker = new google.maps.Marker( {
+            position: {lat: lat, lng: long},
+            map: map,
+            title: "POI"
+        })
+
+        }, function(errorObject) {
+        console.log("The read failed: " + errorObject.code);
+    });
 }
 
 
