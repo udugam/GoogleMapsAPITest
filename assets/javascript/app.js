@@ -21,7 +21,6 @@ function initMap() {
     var map = new google.maps.Map(
         document.getElementById('map'), {zoom: 10, center: toronto});
     // The marker, positioned at Toronto
-    // var marker = new google.maps.Marker({position: toronto, map: map});
 
     map.addListener('click', function(event) {
         //Store lat and long in local variables
