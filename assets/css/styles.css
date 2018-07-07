@@ -1,0 +1,15 @@
+.footer {
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    height: 60px;
+    line-height: 60px;
+    border-top: 1px solid #ccc;
+    text-align: right;
+    margin-top: 10px;
+}
+#map{
+    height:400px;
+    width:100%;
+}
