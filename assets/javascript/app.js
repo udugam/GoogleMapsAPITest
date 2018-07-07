@@ -60,6 +60,11 @@ function initMap() {
         console.log("The read failed: " + errorObject.code);
     });
 }
+//Rating
+function ratingFunction(){
+    //asdjhwiaushdiwuhai
+
+}
 
 
 
