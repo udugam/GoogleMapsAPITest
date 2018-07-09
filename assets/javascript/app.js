@@ -45,11 +45,12 @@ function initMap() {
     })
 
     //Setup listener for everytime a child is added to the root for the database
-    database.ref().on("value", function (snapshot) {
+    database.ref().on("child_added", function (snapshot) {
         console.log(snapshot.val());
         var lat = snapshot.val().latitude;
+        console.log(lat);
         var long = snapshot.val().longitude;
-
+        searchFucntion();
         var marker = new google.maps.Marker({
             position: { lat: lat, lng: long },
             map: map,
@@ -67,7 +68,7 @@ document.getElementById("submitLocation").addEventListener("click",function(){
     var name=document.getElementById("nameInput").value;
     console.log(name);
     database.ref().push({
-        nameID:name,
+        nameID: name,
         latitude: lat,
         longitude: long,
     },function (errorObject) {
@@ -96,6 +97,21 @@ function updateDescription() {
 }
 
 function searchFucntion() {
+    // database.ref().orderByKey().on("value",function(childSnapshot){
+    //     console.log("LOLOLOLOLO")
+    //     console.log(childSnapshot);
+    // })
+
+    var query = firebase.database().ref().orderByKey();
+    query.on("value", function(snapshot) {
+        snapshot.forEach(function(childSnapshot) {
+            console.log(childSnapshot)
+          // key will be "ada" the first time and "alan" the second time
+          var key = childSnapshot.key;
+          // childData will be the actual contents of the child
+          var childData = childSnapshot.val();
+      });
+    });
 
 }
 
