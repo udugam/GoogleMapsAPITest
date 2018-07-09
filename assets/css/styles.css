@@ -5,10 +5,31 @@
     left: 0;
     height: 60px;
     line-height: 60px;
-    text-align: right;
-    margin-top: 10px;
 }
 #map{
-    height:400px;
+    height:60vh;
     width:100%;
+}
+.container {
+    margin: 0px;
+    padding: 0px;
+}
+#mainLogo {
+    height: 60px;
+    width: auto;
+}
+.locForm {
+    border: 1px solid #eee;
+    padding: 20px;
+    border-radius: 5px;
+    background: rgba(255,255,255,0.5);
+    margin-top: -50px;
+}
+.action-buttons {
+    position: absolute;
+    z-index: 2;
+    left: 0;
+    top: 140px;
+    width: 100%;
+    text-align: center;
 }
