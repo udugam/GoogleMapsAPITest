@@ -49,7 +49,6 @@ function initMap() {
     database.ref().on("child_added", function (snapshot) {
         console.log(snapshot.val());
         var lat = snapshot.val().latitude;
-        console.log(lat);
         var long = snapshot.val().longitude;
         searchFucntion();
         var marker = new google.maps.Marker({
@@ -128,7 +127,7 @@ document.getElementById("submitLocation").addEventListener("click",function(){
     var name=document.getElementById("nameInput").value;
     console.log(name);
     database.ref().push({
-        nameID: name,
+        nameID:name,
         latitude: lat,
         longitude: long,
     },function (errorObject) {
@@ -156,6 +155,7 @@ function updateDescription() {
 
 }
 
+//Search Function
 function searchFucntion() {
     // database.ref().orderByKey().on("value",function(childSnapshot){
     //     console.log("LOLOLOLOLO")
