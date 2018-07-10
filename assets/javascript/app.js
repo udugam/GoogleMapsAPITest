@@ -46,7 +46,7 @@ function initMap() {
     })
 
     //Setup listener for everytime a child is added to the root for the database
-    database.ref().on("value", function (snapshot) {
+    database.ref().on("child_added", function (snapshot) {
         console.log(snapshot.val());
         var lat = snapshot.val().latitude;
         var long = snapshot.val().longitude;
