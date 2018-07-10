@@ -123,17 +123,20 @@ $(document).ready(function () {
 });
 
 //Rating
+
+
 document.getElementById("submitLocation").addEventListener("click",function(){
     event.preventDefault();
     console.log("submit");
     var name=document.getElementById("nameInput").value;
-	console.log(name);
+    console.log(name);
+    var description=document.getElementById("addLocDesc").value;
+    console.log(description);
     database.ref().push({
-        nameID:name,
+        nameID: name,
         latitude: lat,
         longitude: long,
-    },function (errorObject) {
-        console.log("The read failed: " + errorObject.code);
+        desc: description,
     });
     
 })
@@ -158,12 +161,26 @@ $('._addPlace').on("click", function() {
     
 
 function updateDescription() {
-
+    var descritpion=document.getElementById("addLocDesc").value;
+    return descritpion;
 }
 
-function searchFucntion() {
-
+//Search Function
+function searchItem(searchName){
+    database.ref().orderByChild("desc").equalTo(searchName).on("child_added",function(snapshot){
+       var description=snapshot.val().desc;
+       console.log(description);
+    })
 }
+
+
+//Function for Search button
+document.getElementById("submitSearch").addEventListener("click",function(){
+    var searchName=document.getElementById("addDescription").value;
+    console.log(searchName);
+    searchItem(searchName);
+
+})
 
 function getLocation() {
 	//These statements 
