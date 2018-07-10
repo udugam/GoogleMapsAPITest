@@ -50,7 +50,7 @@ function initMap() {
         console.log(snapshot.val());
         var lat = snapshot.val().latitude;
         var long = snapshot.val().longitude;
-        searchFucntion();
+
         var marker = new google.maps.Marker({
             position: { lat: lat, lng: long },
             map: map,
@@ -156,24 +156,9 @@ function updateDescription() {
 }
 
 //Search Function
-function searchFucntion() {
-    // database.ref().orderByKey().on("value",function(childSnapshot){
-    //     console.log("LOLOLOLOLO")
-    //     console.log(childSnapshot);
-    // })
+document.getElementById("submitSearch").addEventListener("click",function(){
 
-    var query = firebase.database().ref().orderByKey();
-    query.on("value", function(snapshot) {
-        snapshot.forEach(function(childSnapshot) {
-            console.log(childSnapshot)
-          // key will be "ada" the first time and "alan" the second time
-          var key = childSnapshot.key;
-          // childData will be the actual contents of the child
-          var childData = childSnapshot.val();
-      });
-    });
-
-}
+})
 
 
 
