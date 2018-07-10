@@ -14,13 +14,14 @@ firebase.initializeApp(config);
 var database = firebase.database();
 var lat;
 var long;
+var map;
 // Initialize and add the map
 function initMap() {
   
     // The location of Toronto
     var toronto = { lat: 43.70011, lng: -79.4163 };
     // The map, centered at Uluru
-    var map = new google.maps.Map(
+    map = new google.maps.Map(
         document.getElementById('map'), { zoom: 10, center: toronto });
     // The marker, positioned at Toronto
 
@@ -59,7 +60,8 @@ function initMap() {
 
     }, function (errorObject) {
         console.log("The read failed: " + errorObject.code);
-    });
+	});
+	
 }
 $.fn.extend({
 	animateCss: function(animationName, callback) {
@@ -125,7 +127,7 @@ document.getElementById("submitLocation").addEventListener("click",function(){
     event.preventDefault();
     console.log("submit");
     var name=document.getElementById("nameInput").value;
-    console.log(name);
+	console.log(name);
     database.ref().push({
         nameID:name,
         latitude: lat,
@@ -134,6 +136,10 @@ document.getElementById("submitLocation").addEventListener("click",function(){
         console.log("The read failed: " + errorObject.code);
     });
     
+})
+
+$('._addPlace').on("click", function() {
+	getLocation();
 })
 
 // document.getElementById("like").addEventListener("click", function () {
@@ -159,6 +165,24 @@ function searchFucntion() {
 
 }
 
+function getLocation() {
+	//These statements 
+	if (navigator.geolocation) {
+		navigator.geolocation.getCurrentPosition(function(position) {
+			lat= position.coords.latitude
+			long= position.coords.longitude
 
+			console.log(lat,long)
 
-
+			var marker = new google.maps.Marker({
+				position: { lat: lat, lng: long },
+				map: map,
+				title: "POI"
+			})
+			
+		}, function() {
+			//handleLocationError(true, infoWindow, map.getCenter());
+		});
+	} 
+}
+	
