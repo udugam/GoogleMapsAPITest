@@ -8,12 +8,15 @@ var config = {
 	messagingSenderId: '703244107069'
 };
 
+var API_KEY2 = 'AIzaSyDjQn6mu7DMp57MahmCyoS334lFoNXlzmE'
+
 firebase.initializeApp(config);
 
 // Assign the reference to the database to a variable named 'database'
 var database = firebase.database();
 var lat;
 var long;
+var city;
 var map;
 // Initialize and add the map
 function initMap() {
@@ -102,8 +105,6 @@ $(document).ready(function () {
 });
 
 //Rating
-
-
 document.getElementById("submitLocation").addEventListener("click",function(){
     event.preventDefault();
     console.log("submit");
@@ -114,8 +115,9 @@ document.getElementById("submitLocation").addEventListener("click",function(){
     database.ref().push({
         nameID: name,
         latitude: lat,
-        longitude: long,
-        desc: description,
+		longitude: long,
+		city: city,
+		desc: description,
     });
     
 })
@@ -167,8 +169,11 @@ function getLocation() {
 		navigator.geolocation.getCurrentPosition(function(position) {
 			lat= position.coords.latitude
 			long= position.coords.longitude
+			getCity(lat,long);
 
-			console.log(lat,long)
+			var center = {lat: lat, lng:long}
+			map.setOptions({ zoom: 13, center: center });
+			
 
 			var marker = new google.maps.Marker({
 				position: { lat: lat, lng: long },
@@ -200,6 +205,18 @@ function distance(lat1, lon1, lat2, lon2, unit) {
 	if (unit=="K") { dist = dist * 1.609344 }
 	if (unit=="N") { dist = dist * 0.8684 }
 	return dist
+}
+
+//This function return the city of a given lat, and long
+function getCity(lat, long) {
+    var queryUrl = "https://maps.googleapis.com/maps/api/geocode/json?latlng="+lat+","+long+"&result_type=locality&key="+API_KEY2
+	var regionResponse;
+
+	$.ajax({url:queryUrl,method:"GET"}).then(function(response) {
+		regionResponse = response.results[0].formatted_address
+		
+		city = regionResponse.slice(0,regionResponse.indexOf(','))
+    })
 }
 
 
