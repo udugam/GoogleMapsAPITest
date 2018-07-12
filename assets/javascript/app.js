@@ -14,13 +14,14 @@ firebase.initializeApp(config);
 var database = firebase.database();
 var lat;
 var long;
+var map;
 // Initialize and add the map
 function initMap() {
 
     // The location of Toronto
     var toronto = { lat: 43.70011, lng: -79.4163 };
     // The map, centered at Uluru
-    var map = new google.maps.Map(
+    map = new google.maps.Map(
         document.getElementById('map'), { zoom: 10, center: toronto });
     // The marker, positioned at Toronto
 
@@ -59,7 +60,8 @@ function initMap() {
 
     }, function (errorObject) {
         console.log("The read failed: " + errorObject.code);
-    });
+	});
+	
 }
 $.fn.extend({
     animateCss: function (animationName, callback) {
@@ -204,18 +206,7 @@ document.getElementById("submitSearch").addEventListener("click", function () {
     document.getElementById("addDescription").value = "";
 })
 
-
-
-
-
-
-
-
-
-
-
-
-
+//Like Button
 // document.getElementById("like").addEventListener("click", function () {
 //     console.log("clicked");
 //     var currentLike =parseInt(document.getElementById("like").innerHTML);
@@ -231,3 +222,24 @@ document.getElementById("submitSearch").addEventListener("click", function () {
 // });
 
 
+function getLocation() {
+	//These statements 
+	if (navigator.geolocation) {
+		navigator.geolocation.getCurrentPosition(function(position) {
+			lat= position.coords.latitude
+			long= position.coords.longitude
+
+			console.log(lat,long)
+
+			var marker = new google.maps.Marker({
+				position: { lat: lat, lng: long },
+				map: map,
+				title: "POI"
+			})
+			
+		}, function() {
+			//handleLocationError(true, infoWindow, map.getCenter());
+		});
+	} 
+}
+	
