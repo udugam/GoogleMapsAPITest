@@ -110,12 +110,27 @@ document.getElementById("submitLocation").addEventListener("click",function(){
     console.log(name);
     var description=document.getElementById("addLocDesc").value;
     console.log(description);
-    database.ref().push({
-        nameID: name,
-        latitude: lat,
-        longitude: long,
-        desc: description,
-    });
+    if (validation(name, description, lat, long) === "condition_pass") {
+        database.ref().push({
+            nameID: name,
+            latitude: lat,
+            longitude: long,
+            desc: description,
+        });
+    }
+    else if (validation(name, description, lat, long) === "condition_no_lat&long") {
+        alert("Plz Get Lat and Long");
+    }
+    else if (validation(name, description, lat, long) === "condition_no_name") {
+        alert("plz Name");
+    }
+    else if (validation(name, description, lat, long) === "condition_no_description") {
+        alert("plz desc");
+    }
+    else if (validation(name, description, lat, long) === "YOUSHALLNOTPASS") {
+        alert("Plz type in something");
+    }
+
     
 })
 
@@ -123,41 +138,60 @@ $('._addPlace').on("click", function() {
 	getLocation();
 })
 
-// document.getElementById("like").addEventListener("click", function () {
-//     console.log("clicked");
-//     var currentLike =parseInt(document.getElementById("like").innerHTML);
-//     console.log("currentlike"+currentLike);
-//     if (currentLike === 0) {
-//         currentLike++;
-//     }
-//     else {
-//         currentLike = currentLike + 1;
-//     }
-//     console.log(currentLike);
-//     document.getElementById("like").innerHTML = currentLike;
-// });
+
     
 
 function updateDescription() {
     var descritpion=document.getElementById("addLocDesc").value;
     return descritpion;
 }
+//Check if there is anything in the add your location
+function validation(name, description, lat, long) {
+    if (name == "" || description == "" || typeof lat == "undefined" && typeof long == "undefined") {
+        console.log("Nothing");
+        if (name != "" && description != ""&&typeof lat == "undefined" && typeof long == "undefined") {
+            console.log("Type In long lat");
+            return "condition_no_lat&long";
+        }
+        else if (name != "" && description == "") {
+            console.log("Type in description");
+            return "condition_no_description";
+        }
+        else if (name == "" && description != "") {
+            console.log("Type In Name");
+            return "condition_no_name";
+        }
+
+        return "YOUSHALLNOTPASS";
+    }
+    else
+        return "condition_pass";
+}
 
 //Search Function
-function searchItem(searchName){
-    database.ref().orderByChild("desc").equalTo(searchName).on("child_added",function(snapshot){
-       var description=snapshot.val().desc;
-       console.log(description);
+function searchItem(searchName) {
+    database.ref().orderByChild("desc").equalTo(searchName).on("child_added", function (snapshot) {
+        var description = snapshot.val().desc;
+        console.log(description);
     })
 }
 
 
 //Function for Search button
-document.getElementById("submitSearch").addEventListener("click",function(){
-    var searchName=document.getElementById("addDescription").value;
+document.getElementById("submitSearch").addEventListener("click", function () {
+    var searchName = document.getElementById("addDescription").value;
+    console.log(searchName);
+    if (searchName == "") {
+        document.getElementById("submitSearch").removeAttribute("data-dismiss");
+        console.log("null");
+        alert("Please Type In Something");
+    }
+    else {
+        document.getElementById("submitSearch").setAttribute("data-dismiss", "modal");
+    }
     console.log(searchName);
     searchItem(searchName);
-
+    document.getElementById("addDescription").value = "";
 })
 
 function getLocation() {
@@ -200,3 +234,16 @@ function distance(lat1, lon1, lat2, lon2, unit) {
 	if (unit=="N") { dist = dist * 0.8684 }
 	return dist
 }
+// document.getElementById("like").addEventListener("click", function () {
+//     console.log("clicked");
+//     var currentLike =parseInt(document.getElementById("like").innerHTML);
+//     console.log("currentlike"+currentLike);
+//     if (currentLike === 0) {
+//         currentLike++;
+//     }
+//     else {
+//         currentLike = currentLike + 1;
+//     }
+//     console.log(currentLike);
+//     document.getElementById("like").innerHTML = currentLike;
+// });
