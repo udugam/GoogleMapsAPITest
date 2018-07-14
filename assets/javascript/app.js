@@ -118,6 +118,7 @@ document.getElementById("submitLocation").addEventListener("click",function(){
     console.log(name);
     var description=document.getElementById("addLocDesc").value.trim();
     console.log(description);
+
     if(name && description) {
 		database.ref().push({
 			nameID: name,
@@ -138,29 +139,63 @@ document.getElementById("submitLocation").addEventListener("click",function(){
 $('._addPlace').on("click", function() {
 	getLocation();
 });
-
-// document.getElementById("like").addEventListener("click", function () {
-//     console.log("clicked");
-//     var currentLike =parseInt(document.getElementById("like").innerHTML);
-//     console.log("currentlike"+currentLike);
-//     if (currentLike === 0) {
-//         currentLike++;
-//     }
-//     else {
-//         currentLike = currentLike + 1;
-//     }
-//     console.log(currentLike);
-//     document.getElementById("like").innerHTML = currentLike;
-// });
+    if (validation(name, description, lat, long) === "condition_pass") {
+        database.ref().push({
+			nameID: name,
+			latitude: lat,
+			longitude: long,
+			city: city,
+			desc: description,
+			descSearch: description.toLowerCase()
+		});
+    }
+    else if (validation(name, description, lat, long) === "condition_no_lat&long") {
+        alert("Plz Get Lat and Long");
+    }
+    else if (validation(name, description, lat, long) === "condition_no_name") {
+        alert("plz Name");
+    }
+    else if (validation(name, description, lat, long) === "condition_no_description") {
+        alert("plz desc");
+    }
+    else if (validation(name, description, lat, long) === "YOUSHALLNOTPASS") {
+        alert("Plz type in something");
+    }
+   
     
-
+})
+$('._addPlace').on("click", function() {
+	getLocation();
+})
 function updateDescription() {
     var descritpion=document.getElementById("addLocDesc").value;
     return descritpion;
 }
+//Check if there is anything in the add your location
+function validation(name, description, lat, long) {
+    if (name == "" || description == "" || typeof lat == "undefined" && typeof long == "undefined") {
+        console.log("Nothing");
+        if (name != "" && description != ""&&typeof lat == "undefined" && typeof long == "undefined") {
+            console.log("Type In long lat");
+            return "condition_no_lat&long";
+        }
+        else if (name != "" && description == "") {
+            console.log("Type in description");
+            return "condition_no_description";
+        }
+        else if (name == "" && description != "") {
+            console.log("Type In Name");
+            return "condition_no_name";
+        }
 
-//Search Function
+        return "YOUSHALLNOTPASS";
+    }
+    else
+        return "condition_pass";
+}
+
 function searchItem(searchName){
+
 	var foundLocations = [];
     database.ref().orderByChild("descSearch").startAt(searchName).endAt(searchName+"\u{F8FF}").on("child_added",function(snapshot){
        var item=snapshot.val();
@@ -182,6 +217,14 @@ function renderResults(resultsArray) {
         $("#searchResultsTable").append("<tr><td>" + element.city + "</td><td>" + element.desc + "</td>")
     });
     $('._searchResults').show('slow');
+}
+
+  function searchCity(City){
+    database.ref("/City").orderByChild(searchName).on("value",function(snapshot){
+       var description=snapshot.val();
+       console.log(description);
+    })
+
 }
 
 
@@ -249,5 +292,4 @@ function getCity(lat, long) {
 		city = regionResponse.slice(0,regionResponse.indexOf(','))
     })
 }
-
 
