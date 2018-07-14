@@ -28,7 +28,7 @@ function initMap() {
         document.getElementById('map'), { zoom: 10, center: toronto });
     // The marker, positioned at Toronto
 
-    getLocation();
+    //getLocation();
 
     //Setup listener for everytime a child is added to the root for the database
     database.ref().on("child_added", function (snapshot) {
