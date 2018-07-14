@@ -204,10 +204,11 @@ function renderResults(resultsArray) {
 }
 
 function searchItem(radius) {
+    radius=1;
     city = city.toLowerCase();
     var foundLocations = [];
     database.ref("/City/" + city).on("child_added", function (snapshot) {
-        if (radius === distance(lat, long, snapshot.val().latitude, snapshot.val().longitude, m)) {
+        if (radius <= distance(lat, long, snapshot.val(),latitude. snapshot.val().longitude, k)) {
             var description = snapshot.val().desc;
             console.log(description); 
             foundLocations.push(description);
