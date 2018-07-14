@@ -1,3 +1,6 @@
+body {
+    background: #eee url("../ravenna.png") 0% 0%;
+}
 .footer {
     position: relative;
     width: 100%;
@@ -22,14 +25,21 @@
     border: 1px solid #eee;
     padding: 20px;
     border-radius: 5px;
-    background: rgba(255,255,255,0.5);
-    margin-top: -50px;
+    background: rgba(255,255,255,0.9);
+    margin-top: -180px;
 }
 .action-buttons {
     position: absolute;
     z-index: 2;
     left: 0;
-    top: 140px;
+    top: 60px;
     width: 100%;
     text-align: center;
+}
+._searchResults {
+    margin-top: 20px;
+}
+#_alertMessage {
+    margin-top: 1rem;
+    font-size: medium;
 }

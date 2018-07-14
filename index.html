@@ -7,9 +7,7 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="assets/css/animate.css">
 	<link rel="stylesheet" type="text/css" href="assets/css/styles.css">
-	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-	        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-	        crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
 	        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
 	        crossorigin="anonymous"></script>
@@ -24,7 +22,7 @@
 
 	<div class="row align-items-start">
 		<div class="col-md-2">
-			<img src="https://cdn-images-1.medium.com/max/1600/1*7QzITNnpHIBot7-wpo0iJA.png" id="mainLogo">
+			<img src="https://cdn-images-1.medium.com/max/1600/1*7QzITNnpHIBot7-wpo0iJA.png" alt="A Place to Remember!" id="mainLogo">
 		</div>
 		<div class="col-md-7">
 		</div>
@@ -46,51 +44,64 @@
 
 <div class="relative">
 	<div id="map"></div>
-	<div class="row justify-content-center">
-		<div class="action-buttons">
-			<button type="button" class="btn btn-success btn-sm mr-3" data-toggle="modal" id="findPlace"
-			        data-target="#findPlaceModal">Use my current location
-			</button>
-			<button type="button" class="btn btn-primary btn-sm _addPlace" data-toggle="collapse"
-			        data-target="#addLocationForm"
-			        aria-expanded="false">Drop a pin on the map
-			</button>
-		</div>
-	</div>
 </div>
 
 <div class="container-fluid _action-buttons">
 	<div class="row justify-content-center mt-3">
 		<div id="buttons">
-			<button type="button" class="btn btn-success btn-lg mr-3" data-toggle="modal" id="findPlace" data-target="#findPlaceModal">Find a place</button>
-			<button type="button" class="btn btn-primary btn-lg _addPlace" data-toggle="collapse" data-target="#addLocationForm"
+			<button type="button" class="btn btn-outline-dark btn-lg mr-3" data-toggle="modal" id="findPlace" data-target="#findPlaceModal">Find a place</button>
+			<button type="button" class="btn btn-outline-dark btn-lg _addPlace" data-toggle="collapse" data-target="#addLocationForm"
 			        aria-expanded="false">Add a place</button>
 		</div>
 	</div>
 </div>
-  
+
 <div class="container-fluid _AddLocForm">
 		<div class="row justify-content-center">
 			<div class="col-md-8">
-					<form class="locForm">
-						<h3>Add Your Location</h3>
+				<div class="alert alert-success" id="_alertMessage">Your location has been added. Thank You!</div>
+					<form class="locForm" id="_locForm">
+						<div class="row">
+							<div class="col-sm-8"><h3>Add Your Location</h3></div>
+							<div class="col-sm-4 text-right"><span class="hint"><img src="http://maps.google.com/mapfiles/ms/icons/blue-dot.png"> - Your current location</span></div>
+						</div>
+
 						<div class="form-group">
-							<label for="nameInput">Your Name</label>
-							<input type="name" class="form-control" id="nameInput" placeholder="John Smith">
+							<label for="nameInput">Name</label>
+							<input type="name" class="form-control" id="nameInput" placeholder="Enter location name">
 						</div>
 
 						<div class="form-group">
 							<label for="addLocDesc">Location Description</label>
 							<textarea class="form-control" id="addLocDesc" rows="3"></textarea>
 						</div>
-						<button type="submit" class="btn btn-primary" id="submitLocation">Submit</button>
-						<button type="submit" class="btn btn-warning" id="cancelLocation">Cancel</button>
+						<button type="button" class="btn btn-primary" id="submitLocation">Submit</button>
+						<button type="reset" class="btn btn-warning" id="cancelLocation">Cancel</button>
 					</form>
 				</div>
 			</div>
 
 
 </div>
+
+<div class="card _searchResults">
+	<div class="card-header">
+		<h5>Search results</h5>
+	</div>
+	<div class="card-body">
+		<table class="table table-md">
+			<thead>
+			<tr>
+				<th scope="col">Location's name</th>
+				<th scope="col">Description</th>
+			</tr>
+			</thead>
+			<tbody id="searchResultsTable">
+			</tbody>
+		</table>
+	</div>
+</div>
+
 <footer class="footer">
 	<div class="text-muted text-center">
 		Copyright &copy;2018
@@ -108,7 +119,7 @@
 			</div>
 			<div class="modal-body">
 				<label for="addDescription">What are you looking for?</label>
-				<textarea class="form-control" id="addDescription" rows="1"></textarea>
+				<input class="form-control" id="addDescription">
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -117,8 +128,11 @@
 		</div>
 	</div>
 </div>
+
+
+
 <script src="https://www.gstatic.com/firebasejs/5.2.0/firebase.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
 <script src="./assets/javascript/app.js"></script>
 <script async defer
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBRkzZrUzKNQu0a00P61fXAT-Br3cBHVHQ&callback=initMap">

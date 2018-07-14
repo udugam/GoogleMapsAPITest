@@ -1,4 +1,3 @@
-// Initialize Firebase
 var config = {
 	apiKey: 'AIzaSyCDSfVNfZX6SPPlwLjOrW4YJUzXNoKR4LI',
 	authDomain: 'mapsapitest-f1b56.firebaseapp.com',
@@ -12,13 +11,14 @@ var API_KEY2 = 'AIzaSyDjQn6mu7DMp57MahmCyoS334lFoNXlzmE'
 
 firebase.initializeApp(config);
 
-// Assign the reference to the database to a variable named 'database'
+
 var database = firebase.database();
 var lat;
 var long;
 var city;
 var map;
-// Initialize and add the map
+
+
 function initMap() {
   
     // The location of Toronto
@@ -74,6 +74,8 @@ $.fn.extend({
 
 $(document).ready(function () {
 	$('._AddLocForm').hide();
+    $('#_alertMessage').hide();
+	$('._searchResults').hide();
     $('.action-buttons').hide();
 	$('._addPlace').on('click', function () {
 		$('._header').animateCss('bounceOutUp', function() {
@@ -87,8 +89,11 @@ $(document).ready(function () {
 		}, 2000, function() {
 			// Animation complete.
 		});
+        $('#_locForm').show();
+        $('#_alertMessage').hide();
 		$('._AddLocForm').show().delay(500).addClass('animated flipInY').removeClass('flipInY');
 		$('.action-buttons').show().delay(500).addClass('animated flipInY').removeClass('flipInY');
+        $('._searchResults').hide();
 	});
 
 	$('#cancelLocation').on('click', function () {
@@ -97,28 +102,52 @@ $(document).ready(function () {
 		$('#map').animate({
 			height: "60vh"
 		}, 2000, function() {
-			// Animation complete.
+
 		});
 		$('._AddLocForm').addClass('animated slideInUp').delay(500).hide('slow').removeClass('slideInUp');
 		$('.action-buttons').addClass('animated slideInUp').delay(500).hide('slow').removeClass('slideInUp');
+        $('._searchResults').hide();
 	});
 });
 
-//Rating
+
 document.getElementById("submitLocation").addEventListener("click",function(){
     event.preventDefault();
     console.log("submit");
-    var name=document.getElementById("nameInput").value;
+    var name=document.getElementById("nameInput").value.trim();
     console.log(name);
-    var description=document.getElementById("addLocDesc").value;
+    var description=document.getElementById("addLocDesc").value.trim();
     console.log(description);
+
+    if(name && description) {
+		database.ref().push({
+			nameID: name,
+			latitude: lat,
+			longitude: long,
+			city: city,
+			desc: description,
+			descSearch: description.toLowerCase()
+		});
+        $('#_alertMessage').show();
+        $('#_locForm').hide().reset();
+    } else {
+    	alert('Please enter the location name and description.');
+	}
+    
+});
+
+$('._addPlace').on("click", function() {
+	getLocation();
+});
     if (validation(name, description, lat, long) === "condition_pass") {
-        database.ref("/City/"+city).push({
-                nameID: name,
-                latitude: lat,
-                longitude: long,
-                desc: description,
-        });
+        database.ref().push({
+			nameID: name,
+			latitude: lat,
+			longitude: long,
+			city: city,
+			desc: description,
+			descSearch: description.toLowerCase()
+		});
     }
     else if (validation(name, description, lat, long) === "condition_no_lat&long") {
         alert("Plz Get Lat and Long");
@@ -166,27 +195,54 @@ function validation(name, description, lat, long) {
 }
 
 function searchItem(searchName){
+
+	var foundLocations = [];
+    database.ref().orderByChild("descSearch").startAt(searchName).endAt(searchName+"\u{F8FF}").on("child_added",function(snapshot){
+       var item=snapshot.val();
+       foundLocations.push(item);
+    });
+    if(foundLocations.length > 0) {
+        jQuery('#findPlaceModal').modal('hide');
+        renderResults(foundLocations);
+    } else {
+    	alert('No locations found. Please try again.');
+	}
+}
+
+
+// render table with results
+function renderResults(resultsArray) {
+    $("#searchResultsTable").empty();
+    resultsArray.forEach(function (element, index) {
+        $("#searchResultsTable").append("<tr><td>" + element.city + "</td><td>" + element.desc + "</td>")
+    });
+    $('._searchResults').show('slow');
+}
+
+  function searchCity(City){
     database.ref("/City").orderByChild(searchName).on("value",function(snapshot){
        var description=snapshot.val();
        console.log(description);
     })
+
 }
+
 
 
 //Function for Search button
 document.getElementById("submitSearch").addEventListener("click",function(){
-    var searchName=document.getElementById("addDescription").value;
+    var searchName=document.getElementById("addDescription").value.toLowerCase();
     console.log(searchName);
     searchItem(searchName);
 
-})
+});
 
 function getLocation() {
 	//These statements 
 	if (navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(function(position) {
-			lat= position.coords.latitude
-			long= position.coords.longitude
+			lat= position.coords.latitude;
+			long= position.coords.longitude;
 			getCity(lat,long);
 
 			var center = {lat: lat, lng:long}
@@ -209,17 +265,17 @@ function getLocation() {
 //This function accepts two coordinate objects and returns the distance between them
 function distance(lat1, lon1, lat2, lon2, unit) {
 
-	var radlat1 = Math.PI * lat1/180
-	var radlat2 = Math.PI * lat2/180
+	var radlat1 = Math.PI * lat1/180;
+	var radlat2 = Math.PI * lat2/180;
 	var theta = lon1-lon2
-	var radtheta = Math.PI * theta/180
+	var radtheta = Math.PI * theta/180;
 	var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
 	if (dist > 1) {
 		dist = 1;
 	}
-	dist = Math.acos(dist)
-	dist = dist * 180/Math.PI
-	dist = dist * 60 * 1.1515
+	dist = Math.acos(dist);
+	dist = dist * 180/Math.PI;
+	dist = dist * 60 * 1.1515;
 	if (unit=="K") { dist = dist * 1.609344 }
 	if (unit=="N") { dist = dist * 0.8684 }
 	return dist
