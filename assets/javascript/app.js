@@ -113,11 +113,10 @@ document.getElementById("submitLocation").addEventListener("click",function(){
     var description=document.getElementById("addLocDesc").value;
     console.log(description);
     if (validation(name, description, lat, long) === "condition_pass") {
-        database.ref().push({
+        database.ref("/City/"+city).push({
                 nameID: name,
                 latitude: lat,
                 longitude: long,
-                city: city,
                 desc: description,
         });
     }
@@ -165,14 +164,10 @@ function validation(name, description, lat, long) {
     else
         return "condition_pass";
 }
-//Find City
-// function searchCity(City Name){
-//     databse.ref("/Region").orderByChild().equalTo(""
-// }
-//Search Function
+
 function searchItem(searchName){
-    database.ref().orderByChild("desc").equalTo(searchName).on("child_added",function(snapshot){
-       var description=snapshot.val().desc;
+    database.ref("/City").orderByChild(searchName).on("value",function(snapshot){
+       var description=snapshot.val();
        console.log(description);
     })
 }
@@ -241,5 +236,4 @@ function getCity(lat, long) {
 		city = regionResponse.slice(0,regionResponse.indexOf(','))
     })
 }
-
 
