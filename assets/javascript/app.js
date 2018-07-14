@@ -1,3 +1,4 @@
+// Initialize Firebase
 var config = {
 	apiKey: 'AIzaSyCDSfVNfZX6SPPlwLjOrW4YJUzXNoKR4LI',
 	authDomain: 'mapsapitest-f1b56.firebaseapp.com',
@@ -7,12 +8,15 @@ var config = {
 	messagingSenderId: '703244107069'
 };
 
+var API_KEY2 = 'AIzaSyDjQn6mu7DMp57MahmCyoS334lFoNXlzmE'
+
 firebase.initializeApp(config);
 
 // Assign the reference to the database to a variable named 'database'
 var database = firebase.database();
 var lat;
 var long;
+var city;
 var map;
 // Initialize and add the map
 function initMap() {
@@ -101,8 +105,6 @@ $(document).ready(function () {
 });
 
 //Rating
-
-
 document.getElementById("submitLocation").addEventListener("click",function(){
     event.preventDefault();
     console.log("submit");
@@ -112,11 +114,11 @@ document.getElementById("submitLocation").addEventListener("click",function(){
     console.log(description);
     if (validation(name, description, lat, long) === "condition_pass") {
         database.ref().push({
-            nameID: name,
-            latitude: lat,
-            longitude: long,
-            desc: description,
-          
+                nameID: name,
+                latitude: lat,
+                longitude: long,
+                city: city,
+                desc: description,
         });
     }
     else if (validation(name, description, lat, long) === "condition_no_lat&long") {
@@ -131,6 +133,8 @@ document.getElementById("submitLocation").addEventListener("click",function(){
     else if (validation(name, description, lat, long) === "YOUSHALLNOTPASS") {
         alert("Plz type in something");
     }
+   
+    
 })
 $('._addPlace').on("click", function() {
 	getLocation();
@@ -166,29 +170,20 @@ function validation(name, description, lat, long) {
 //     databse.ref("/Region").orderByChild().equalTo(""
 // }
 //Search Function
-function searchItem(searchName) {
-    database.ref().orderByChild("desc").equalTo(searchName).on("child_added", function (snapshot) {
-        var description = snapshot.val().desc;
-        console.log(description);
+function searchItem(searchName){
+    database.ref().orderByChild("desc").equalTo(searchName).on("child_added",function(snapshot){
+       var description=snapshot.val().desc;
+       console.log(description);
     })
 }
 
 
 //Function for Search button
-document.getElementById("submitSearch").addEventListener("click", function () {
-    var searchName = document.getElementById("addDescription").value;
-    console.log(searchName);
-    if (searchName == "") {
-        document.getElementById("submitSearch").removeAttribute("data-dismiss");
-        console.log("null");
-        alert("Please Type In Something");
-    }
-    else {
-        document.getElementById("submitSearch").setAttribute("data-dismiss", "modal");
-    }
+document.getElementById("submitSearch").addEventListener("click",function(){
+    var searchName=document.getElementById("addDescription").value;
     console.log(searchName);
     searchItem(searchName);
-    document.getElementById("addDescription").value = "";
+
 })
 
 function getLocation() {
@@ -197,8 +192,11 @@ function getLocation() {
 		navigator.geolocation.getCurrentPosition(function(position) {
 			lat= position.coords.latitude
 			long= position.coords.longitude
+			getCity(lat,long);
 
-			console.log(lat,long)
+			var center = {lat: lat, lng:long}
+			map.setOptions({ zoom: 13, center: center });
+			
 
 			var marker = new google.maps.Marker({
 				position: { lat: lat, lng: long },
@@ -231,16 +229,17 @@ function distance(lat1, lon1, lat2, lon2, unit) {
 	if (unit=="N") { dist = dist * 0.8684 }
 	return dist
 }
-// document.getElementById("like").addEventListener("click", function () {
-//     console.log("clicked");
-//     var currentLike =parseInt(document.getElementById("like").innerHTML);
-//     console.log("currentlike"+currentLike);
-//     if (currentLike === 0) {
-//         currentLike++;
-//     }
-//     else {
-//         currentLike = currentLike + 1;
-//     }
-//     console.log(currentLike);
-//     document.getElementById("like").innerHTML = currentLike;
-// });
+
+//This function return the city of a given lat, and long
+function getCity(lat, long) {
+    var queryUrl = "https://maps.googleapis.com/maps/api/geocode/json?latlng="+lat+","+long+"&result_type=locality&key="+API_KEY2
+	var regionResponse;
+
+	$.ajax({url:queryUrl,method:"GET"}).then(function(response) {
+		regionResponse = response.results[0].formatted_address
+		
+		city = regionResponse.slice(0,regionResponse.indexOf(','))
+    })
+}
+
+
