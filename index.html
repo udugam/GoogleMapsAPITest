@@ -17,19 +17,19 @@
 </head>
 
 <body>
-
-<header class="_header container-fluid">
-
-	<div class="row align-items-start">
-		<div class="col-md-2">
-			<img src="https://cdn-images-1.medium.com/max/1600/1*7QzITNnpHIBot7-wpo0iJA.png" alt="A Place to Remember!" id="mainLogo">
-		</div>
-		<div class="col-md-7">
-		</div>
-		<div class="col-md-3 text-right">
-			<div class="dropdown show" id="translate">
-				<a class="btn btn-secondary dropdown-toggle my-2" href="#" role="button" id="dropdownMenuLink"
-				   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+	
+	<header class="_header container-fluid">
+		
+		<div class="row align-items-start">
+			<div class="col-md-2">
+				<img src="https://cdn-images-1.medium.com/max/1600/1*7QzITNnpHIBot7-wpo0iJA.png" alt="A Place to Remember!" id="mainLogo">
+			</div>
+			<div class="col-md-7">
+			</div>
+			<div class="col-md-3 text-right">
+				<div class="dropdown show" id="translate">
+					<a class="btn btn-secondary dropdown-toggle my-2" href="#" role="button" id="dropdownMenuLink"
+					data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 					English
 				</a>
 				<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
@@ -40,6 +40,7 @@
 			</div>
 		</div>
 	</div>
+	<div id="google_translate_element"></div>
 </header>
 
 <div class="relative">
@@ -128,8 +129,7 @@
 		</div>
 	</div>
 </div>
-
-
+<script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
 <script src="https://www.gstatic.com/firebasejs/5.2.0/firebase.js"></script>
 

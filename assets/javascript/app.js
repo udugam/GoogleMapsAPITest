@@ -291,3 +291,8 @@ function getCity(lat, long) {
     })
 }
 
+//This function add the translate functionality to the page
+function googleTranslateElementInit() {
+    new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
+}
+
