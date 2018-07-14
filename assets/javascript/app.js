@@ -116,6 +116,7 @@ document.getElementById("submitLocation").addEventListener("click",function(){
             latitude: lat,
             longitude: long,
             desc: description,
+          
         });
     }
     else if (validation(name, description, lat, long) === "condition_no_lat&long") {
@@ -130,17 +131,10 @@ document.getElementById("submitLocation").addEventListener("click",function(){
     else if (validation(name, description, lat, long) === "YOUSHALLNOTPASS") {
         alert("Plz type in something");
     }
-
-    
 })
-
 $('._addPlace').on("click", function() {
 	getLocation();
 })
-
-
-    
-
 function updateDescription() {
     var descritpion=document.getElementById("addLocDesc").value;
     return descritpion;
@@ -167,7 +161,10 @@ function validation(name, description, lat, long) {
     else
         return "condition_pass";
 }
-
+//Find City
+// function searchCity(City Name){
+//     databse.ref("/Region").orderByChild().equalTo(""
+// }
 //Search Function
 function searchItem(searchName) {
     database.ref().orderByChild("desc").equalTo(searchName).on("child_added", function (snapshot) {
