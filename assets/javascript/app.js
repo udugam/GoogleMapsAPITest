@@ -1,4 +1,3 @@
-// Initialize Firebase
 var config = {
 	apiKey: 'AIzaSyCDSfVNfZX6SPPlwLjOrW4YJUzXNoKR4LI',
 	authDomain: 'mapsapitest-f1b56.firebaseapp.com',
@@ -12,13 +11,14 @@ var API_KEY2 = 'AIzaSyDjQn6mu7DMp57MahmCyoS334lFoNXlzmE'
 
 firebase.initializeApp(config);
 
-// Assign the reference to the database to a variable named 'database'
+
 var database = firebase.database();
 var lat;
 var long;
 var city;
 var map;
-// Initialize and add the map
+
+
 function initMap() {
   
     // The location of Toronto
@@ -102,7 +102,7 @@ $(document).ready(function () {
 		$('#map').animate({
 			height: "60vh"
 		}, 2000, function() {
-			// Animation complete.
+
 		});
 		$('._AddLocForm').addClass('animated slideInUp').delay(500).hide('slow').removeClass('slideInUp');
 		$('.action-buttons').addClass('animated slideInUp').delay(500).hide('slow').removeClass('slideInUp');
@@ -110,7 +110,7 @@ $(document).ready(function () {
 	});
 });
 
-//Rating
+
 document.getElementById("submitLocation").addEventListener("click",function(){
     event.preventDefault();
     console.log("submit");
