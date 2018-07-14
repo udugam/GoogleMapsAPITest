@@ -145,9 +145,6 @@ document.getElementById("submitLocation").addEventListener("click", function () 
 
 
 })
-$('._addPlace').on("click", function () {
-    getLocation();
-})
 function updateDescription() {
     var descritpion = document.getElementById("addLocDesc").value;
     return descritpion;
