@@ -232,9 +232,10 @@ function searchItem(radius) {
     if (foundLocations.length > 0) {
         //jQuery('#findPlaceModal').modal('hide');
         renderResults(foundLocations);
-    } else {
-        alert('No locations found. Please try again.');
-    }
+    } 
+//        else {
+//         alert('No locations found. Please try again.');
+//     }
 
 }
 
