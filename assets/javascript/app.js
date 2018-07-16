@@ -133,6 +133,9 @@ document.getElementById("submitLocation").addEventListener("click", function () 
             desc: description,
             descSearch: description.toLowerCase()
         });
+        
+   $('._AddLocForm').hide();
+        
     }
     else if (validation(name, description, lat, long) === "condition_no_lat&long") {
         alert("Plz Get Lat and Long");
