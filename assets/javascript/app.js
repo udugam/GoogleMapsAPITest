@@ -32,21 +32,23 @@ function initMap() {
 
     getLocation();
 
+
     //Setup listener for everytime a child is added to the root for the database
-//     database.ref().on("child_added", function (snapshot) {
-//         console.log(snapshot.val());
-//         var lat = snapshot.val().latitude;
-//         var long = snapshot.val().longitude;
+    // database.ref("/City/" + city).on("child_added", function (snapshot) {
+    //     console.log(snapshot.val());
+    //     var lat = snapshot.val().latitude;
+    //     var long = snapshot.val().longitude;
 
-//         var marker = new google.maps.Marker({
-//             position: { lat: lat, lng: long },
-//             map: map,
-//             title: "POI"
-//         })
 
-//     }, function (errorObject) {
-//         console.log("The read failed: " + errorObject.code);
-//     });
+    //     var marker = new google.maps.Marker({
+    //         position: { lat: lat, lng: long },
+    //         map: map,
+    //         title: "POI"
+    //     })
+
+    // }, function (errorObject) {
+    //     console.log("The read failed: " + errorObject.code);
+    // });
 
 }
 $.fn.extend({
@@ -144,17 +146,17 @@ document.getElementById("submitLocation").addEventListener("click", function () 
     else if (validation(name, description, lat, long) === "YOUSHALLNOTPASS") {
         alert("Plz type in something");
     }
+});
 
+document.getElementById("findPlace").addEventListener("click", function () {
 
-})
-<<<<<<< HEAD
-=======
+    searchItem();
+});
 
 // $('._addPlace').on("click", function () {
 //     getLocation();
 // })
 
->>>>>>> 97919ff3172a3844fcb1dbc36e4aa760f4c6bb01
 function updateDescription() {
     var descritpion = document.getElementById("addLocDesc").value;
     return descritpion;
@@ -211,20 +213,24 @@ function renderResults(resultsArray) {
 }
 
 function searchItem(radius) {
-    radius=10;
+    radius = 10;
     city = city.toLowerCase();
     var foundLocations = [];
     database.ref("/City/" + city).on("child_added", function (snapshot) {
         console.log(distance(lat, long, snapshot.val().latitude, snapshot.val().longitude, "N"));
-        if (distance(lat, long, snapshot.val().latitude, snapshot.val().longitude, "N")<=radius) {
-            var description = snapshot.val().desc;
-            console.log(description); 
+        if (distance(lat, long, snapshot.val().latitude, snapshot.val().longitude, "N") <= radius) {
+            var description = snapshot.val().desc;  
+            console.log(description);
             foundLocations.push(description);
+            var marker = new google.maps.Marker({
+                position: { lat: snapshot.val().latitude, lng: snapshot.val().longitude},
+                map: map,
+                title: "POI"
+            })
         }
-
     });
     if (foundLocations.length > 0) {
-        jQuery('#findPlaceModal').modal('hide');
+        //jQuery('#findPlaceModal').modal('hide');
         renderResults(foundLocations);
     } else {
         alert('No locations found. Please try again.');
@@ -235,12 +241,12 @@ function searchItem(radius) {
 
 
 //Function for Search button
-document.getElementById("submitSearch").addEventListener("click", function () {
-    var searchName = document.getElementById("addDescription").value.toLowerCase();
-    console.log(searchName);
-    searchItem(searchName);
+// document.getElementById("submitSearch").addEventListener("click", function () {
+//     var searchName = document.getElementById("addDescription").value.toLowerCase();
+//     console.log(searchName);
+//     searchItem(searchName);
 
-});
+// });
 
 function getLocation() {
     //These statements 
@@ -249,7 +255,7 @@ function getLocation() {
             lat = position.coords.latitude;
             long = position.coords.longitude;
             getCity(lat, long);
-            getTemperature(lat,long);
+            getTemperature(lat, long);
 
             var center = { lat: lat, lng: long }
             map.setOptions({ zoom: 13, center: center });
@@ -299,14 +305,14 @@ function getCity(lat, long) {
     })
 }
 
-function getTemperature(lat,long) {
-    var queryURL = "https://api.openweathermap.org/data/2.5/weather?lat="+lat+"&lon="+long+"&appid=" + WEATHERAPI_KEY;
+function getTemperature(lat, long) {
+    var queryURL = "https://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + long + "&appid=" + WEATHERAPI_KEY;
     $.ajax({
         url: queryURL,
         method: "GET"
-      }).then(function(response) {     
+    }).then(function (response) {
         var tempK = response.main.temp;
-        var tempC = Math.round(tempK-273.15);
-        $("#weatherDisplay").html("<h2>"+tempC+"&#8451</h2>")
-      });
+        var tempC = Math.round(tempK - 273.15);
+        $("#weatherDisplay").html("<h2>" + tempC + "&#8451</h2>")
+    });
 }
