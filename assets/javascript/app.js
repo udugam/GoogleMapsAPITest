@@ -8,6 +8,7 @@ var config = {
 };
 
 var API_KEY2 = 'AIzaSyDjQn6mu7DMp57MahmCyoS334lFoNXlzmE'
+var WEATHERAPI_KEY = '137816d9575527268f67de5df6431d29'
 
 firebase.initializeApp(config);
 
@@ -17,6 +18,7 @@ var lat;
 var long;
 var city;
 var map;
+var temperature;
 
 
 function initMap() {
@@ -31,20 +33,20 @@ function initMap() {
     getLocation();
 
     //Setup listener for everytime a child is added to the root for the database
-    database.ref().on("child_added", function (snapshot) {
-        console.log(snapshot.val());
-        var lat = snapshot.val().latitude;
-        var long = snapshot.val().longitude;
+//     database.ref().on("child_added", function (snapshot) {
+//         console.log(snapshot.val());
+//         var lat = snapshot.val().latitude;
+//         var long = snapshot.val().longitude;
 
-        var marker = new google.maps.Marker({
-            position: { lat: lat, lng: long },
-            map: map,
-            title: "POI"
-        })
+//         var marker = new google.maps.Marker({
+//             position: { lat: lat, lng: long },
+//             map: map,
+//             title: "POI"
+//         })
 
-    }, function (errorObject) {
-        console.log("The read failed: " + errorObject.code);
-    });
+//     }, function (errorObject) {
+//         console.log("The read failed: " + errorObject.code);
+//     });
 
 }
 $.fn.extend({
@@ -145,9 +147,11 @@ document.getElementById("submitLocation").addEventListener("click", function () 
 
 
 })
-$('._addPlace').on("click", function () {
-    getLocation();
-})
+
+// $('._addPlace').on("click", function () {
+//     getLocation();
+// })
+
 function updateDescription() {
     var descritpion = document.getElementById("addLocDesc").value;
     return descritpion;
@@ -242,6 +246,7 @@ function getLocation() {
             lat = position.coords.latitude;
             long = position.coords.longitude;
             getCity(lat, long);
+            getTemperature(lat,long);
 
             var center = { lat: lat, lng: long }
             map.setOptions({ zoom: 13, center: center });
@@ -291,3 +296,14 @@ function getCity(lat, long) {
     })
 }
 
+function getTemperature(lat,long) {
+    var queryURL = "https://api.openweathermap.org/data/2.5/weather?lat="+lat+"&lon="+long+"&appid=" + WEATHERAPI_KEY;
+    $.ajax({
+        url: queryURL,
+        method: "GET"
+      }).then(function(response) {     
+        var tempK = response.main.temp;
+        var tempC = Math.round(tempK-273.15);
+        $("#weatherDisplay").html("<h2>"+tempC+"&#8451</h2>")
+      });
+}
